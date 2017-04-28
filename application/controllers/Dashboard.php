@@ -6,7 +6,7 @@ class Dashboard extends MY_Controller {
 /*
 *
 *Richard Karsan
-*Home controller
+*Dashboard controller
 *
 */
 
@@ -18,7 +18,7 @@ class Dashboard extends MY_Controller {
 
 	public function index()
 	{
-		$this->home();
+		$this->home();//redirect to home function
 	}
 
 	public function home()
@@ -48,29 +48,13 @@ class Dashboard extends MY_Controller {
                   date : '12 June 2017',
                   lat : -6.816330,
                   long : 39.276638
-                },
-                {
-                  location_id: '4',
-                  city : 'Kolkata',
-                  desc : 'Howrah Bridge!',
-                  date : '10 April 2017',
-                  lat : 22.500000,
-                  long : 88.400000
-                },
-                {
-                  location_id: '5',
-                  city : 'Chennai  ',
-                  desc : 'Kathipara Bridge!',
-                  date : '10 April 2017',
-                  lat : 13.000000,
-                  long : 80.250000
-                } ";
+                }";
               
 		$data['content'] = "dashboard/dashboard_map";
     $this->load->view('dashboard/dashboard_home',$data);
   }
 
-  public function book_location($passed_event_id = NULL)
+  public function book_location($passed_event_id = NULL,$success_status = NULL)
   {
     /*
     *Dynamic function that takes both post and passed parameter to enable redirect without having to post
@@ -90,7 +74,7 @@ class Dashboard extends MY_Controller {
 
 		$stands = dashboard_model::get_stands($event_id);
     $data['stands'] = $stands;
-    // echo "<pre>";print_r($stands);exit;
+
     $stands_final = array();
 
     foreach ($stands as $key => $value) {
@@ -100,7 +84,6 @@ class Dashboard extends MY_Controller {
       $event_id = $value['event_id'];
       $stand_id = $value['stand_id'];
 
-      // echo $event_id.' '.$stand_id;
       $stand['stand_id'] = $stand_id;
       $stand['event_id'] = $event_id;
       $stand['stand_number'] = $value['stand_number'];
@@ -111,13 +94,12 @@ class Dashboard extends MY_Controller {
         /*
         *Addition of company information if stand is booked
         */
-        $booking_data = dashboard_model::get_event_booking_data($event_id,$stand_id);
+        $booking_data = dashboard_model::get_event_booking_data_specific($event_id,$stand_id);
         //Assumption: If stand is booked, company data must be present. 
         $booking_data = array_pop($booking_data);
         $company_id = $booking_data['company_id'];
-        // echo "<pre>";print_r($booking_data);exit;
         $company_data = dashboard_model::get_company_data($company_id);
-        $company_data = array_pop($company_data);
+        // $company_data = array_pop($company_data);
 
         $stand['company_id'] = $company_data['company_id'];
         $stand['company_email'] = $company_data['company_email'];
@@ -126,7 +108,6 @@ class Dashboard extends MY_Controller {
         $stand['company_description'] = $company_data['company_description'];
         $stand['company_logo_url'] = $company_data['logo_url'];
         $stand['company_docs_url'] = $company_data['doc_url'];
-        // echo "<pre>";print_r($company_data);exit;
       }else{
         /*Ensures no carrying over of values when array loops over booked stand then over unbooked stand*/
         $stand['company_id'] = $stand['company_name'] = $stand['company_description'] = $stand['company_logo_url'] = $stand['company_docs_url'] = "N/A";
@@ -136,6 +117,10 @@ class Dashboard extends MY_Controller {
 
     }//end of stands foreach
 
+    //echo "<pre>";print_r($stands_final);exit;
+    $data['success_status'] = (isset($success_status) && $success_status > 0)? $success_status: NULL;
+    $data['event_id'] = $event_id;
+    $data['header_title'] = "Stand Reservation";
     $data['stands'] = $stands_final;
     $data['content'] = "dashboard/dashboard_stands";
 
@@ -213,7 +198,6 @@ class Dashboard extends MY_Controller {
     $logo_upload_name = $logo_data['upload_data']['file_name'];//Uploaded file name
     $update_data['logo_url'] = base_url().'uploads/logos/'.$logo_upload_name;//Logo URL for company table
 
-    // echo "<pre>";print_r($_FILES['company_document']);exit;
     $doc_file_name = $_FILES["company_document"]["name"];
     $doc_ext = pathinfo($doc_file_name, PATHINFO_EXTENSION);
 
@@ -247,8 +231,8 @@ class Dashboard extends MY_Controller {
     /*STAND UPDATE*/
     $stand_update['booking_status'] = 2;
     $this->db->where('stand_id', $stand_id);
-    $stand_update = $this->db->update('stand', $stand_update); 
-
+    $stand_update_ = $this->db->update('stand', $stand_update); 
+    // echo $stand_update;exit;
     redirect('Dashboard/book_location/'.$event_id);
   }
 
@@ -259,7 +243,6 @@ class Dashboard extends MY_Controller {
     $file_url = dashboard_model::get_company_doc_url($company_id);
     $download_from_url = $file_url['doc_url'];
 
-    // echo "<pre>";print_r($download_from_url);exit;
     ob_clean(); 
     $data = file_get_contents($download_from_url); //assuming my file is on localhost
     $path_parts = pathinfo($download_from_url);
@@ -270,7 +253,80 @@ class Dashboard extends MY_Controller {
   }
 
   public function send_email()
+  {//TEST FUNCTION FOR MAIL SENDING
+    $this->send_mail();//FUNCTION DEFINED IN MY_CONTROLLER.
+  }
+
+  public function send_email_reports($event_id)
+  {//RANDOM NUMBER FOR PEOPLE WHO VISITED STALL
+    //SENDING OF FINAL REPORTS
+    $booking_data = dashboard_model::get_event_booking_data_general($event_id);
+    $all_emails = array();
+
+    foreach ($booking_data as $key => $value) {
+      $company_id = $value['company_id'];
+
+      $company_data = dashboard_model::get_company_data($company_id);
+      
+      $to = $company_data['company_email'];
+      $subject = "Conclusion of the event";
+      $body = "Your stand had ".rand()." visitors";
+
+      $send_mail = $this->send_mail($to,$subject,$body);
+    }
+    // echo "<pre>";print_r($company_data);exit;
+    redirect('Dashboard/book_location/NULL/'.$event_id);
+  }
+
+  public function add_event($success_status = NULL)
   {
-    $this->send_mail();
+    $data['success_status'] = (isset($success_status) && $success_status > 0)? $success_status: NULL;
+    $data['content'] = "dashboard/dashboard_add_event";
+    $this->load->view('dashboard/dashboard_home',$data);
+  }
+
+  public function save_event()
+  {
+    $posted_data = $this->input->post();
+
+    // echo "<pre>";print_r($posted_data);exit;
+
+    $e_data = array(
+       'event_name' => $posted_data['event_name'] ,
+       'event_description' => $posted_data['event_description'],
+       'event_date' => $posted_data['event_date'] 
+    );
+
+    $insertion = $this->db->insert('event', $e_data); 
+    $last_insert_id = $this->db->insert_id();
+
+    $l_data = array(
+       'latitude' => $posted_data['latitude'] ,
+       'longitude' => $posted_data['longitude'] ,
+       'event_id' => $last_insert_id 
+    );
+
+    $insertion_l = $this->db->insert('location', $l_data);
+
+    // echo "<pre>";print_r($insertion_l);exit;
+
+    redirect('Dashboard/add_event/1');
+  }
+
+  public function unit_test()
+    {
+      $this->unit->run($this->test(), 'is_string',"Testing test function");
+      $this->unit->run(dashboard_model::get_stands(1), 'is_array',"Testing dashboard_model::get_stands() function");
+      $this->unit->run(dashboard_model::get_company_doc_url(1), 'is_array',"Testing dashboard_model::get_company_doc_url() function");
+      $this->unit->run(dashboard_model::get_stand_data(1), 'is_array',"Testing dashboard_model::get_stand_data() function");
+      $this->unit->run(dashboard_model::get_event_booking_data_specific(1), 'is_array',"Testing dashboard_model::get_event_booking_data_specific() function");
+      $this->unit->run(dashboard_model::get_company_data(1), 'is_array',"Testing dashboard_model::get_company_data  () function");
+
+      $this->load->view('tests/tests');
+    }
+
+  public function test()
+  {
+    return "String";
   }
 }

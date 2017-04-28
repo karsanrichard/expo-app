@@ -1,5 +1,10 @@
 <link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL.'dashboard/css/stands.css'; ?>">
-
+<?php if($success_status): ?>
+		<div class="alert alert-info">
+	        <button type="button" aria-hidden="true" class="close">×</button>
+	        <span>Emails sent <b>successfully </b></span>
+	    </div>
+	<?php endif; ?>
 <div class="col-md-12 stands-margin-main">
 	<div class="col-md-12 stands-main">
 	<div class="top-rows">
@@ -82,28 +87,28 @@
 		?>
 		<?php if($booked == 2): ?>
 			<div class="col-md-2 <?php echo $offset .' '. $booked_styling; ?>  stands-spec">
-				<div class="company-item no-padding no-margin">
-					<a class="thumb-info" href="#">
-					<center>
-						<img src="<?php echo $stands[$i]['company_logo_url']; ?>" class="img-responsive max-100px" alt="">
-						<span class="thumb-info-title"> BOOKED </span>
-						</center>
-					</a>
-		  		</div>
-		  		<hr class="no-margin">
-		        <div id="company-desc" class="">
-		          <h6 class="title no-margin"><?php echo $stands[$i]['company_name']; ?></h6>
-		          <div class="desc">
-		          	<?php echo $stands[$i]['company_email']; ?></br><?php echo $stands[$i]['company_phone']; ?>
-		          </div>
-		          <div class="">
-		              <div class="no-margin">
-		        		<a class="btn btn-primary btn-sm small-text col-md-12" href="<?php echo base_url().'Dashboard/download_documents'; ?>"><i class="fa fa-arrow-circle-down"></i>Documents</a>
+			<div class="company-item no-padding no-margin">
+				<a class="thumb-info" href="#">
+				<center>
+					<img src="<?php echo $stands[$i]['company_logo_url']; ?>" class="img-responsive max-100px" alt="">
+					<span class="thumb-info-title"> RESERVED </span>
+					</center>
+				</a>
+	  		</div>
+	  		<hr class="no-margin">
+	        <div id="company-desc" class="">
+	          <h6 class="title no-margin"><?php echo $stands[$i]['company_name']; ?></h6>
+	          <div class="desc">
+	          	<?php echo $stands[$i]['company_email']; ?></br><?php echo $stands[$i]['company_phone']; ?>
+	          </div>
+	          <div class="">
+	              <div class="no-margin">
+	        		<a class="btn btn-primary btn-sm small-text col-md-12" href="<?php echo base_url().'Dashboard/download_document/'.$stands[$i]['company_id']; ?>"><i class="fa fa-arrow-circle-down"></i>Documents</a>
 
-		              </div>
-		          </div>
-		        </div>
-			</div>
+	              </div>
+	          </div>
+	        </div>
+		</div>
 		<?php else: ?>
 			<div class="col-md-2 <?php echo $offset .' '. $booked_styling; ?>  stands-spec">
 				<div class="company-item no-padding no-margin">
@@ -132,8 +137,11 @@
 		<?php $k++;}	?>
 	</div>
 		
-	
 	</div>
+</div>
+
+<div class="col-md-12">
+	<a href="<?php echo base_url()."Dashboard/send_email_reports/".$event_id; ?>" class="btn btn-info btn-fill pull-right">Simulate event conclusion and send out alerts</a>
 </div>
 
 <script type="text/javascript">

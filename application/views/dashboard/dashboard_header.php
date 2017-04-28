@@ -2,7 +2,7 @@
                 <div class="container-fluid">
                     <div class="navbar-header">
                         
-                        <a class="navbar-brand" href="#">Dashboard</a>
+                        <a class="navbar-brand" href="#"><?php $header_title = (isset($header_title) && $header_title != '')?$header_title:"Dashboard"; echo $header_title;?></a>
                     </div>
                     <div class="collapse navbar-collapse">
                         

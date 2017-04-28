@@ -17,7 +17,16 @@ class Dashboard_model extends MY_Model
         return $stands;
     }
 
-    public static function get_event_booking_data($event_id = NULL, $stand_id = NULL)
+    public static function get_event_booking_data_general($event_id = NULL)
+    {
+        $ci =& get_instance();
+        $booking_data = $ci->db->get_where('event_booking', array('event_id' => $event_id))->result_array();
+        
+        return $booking_data;
+    }
+
+
+    public static function get_event_booking_data_specific($event_id = NULL, $stand_id = NULL)
     {
         $ci =& get_instance();
         $booking_data = $ci->db->get_where('event_booking', array('event_id' => $event_id,'stand_id' => $stand_id),1)->result_array();
@@ -30,7 +39,7 @@ class Dashboard_model extends MY_Model
         $ci =& get_instance();
         $company_data = $ci->db->get_where('company', array('company_id' => $company_id),1)->result_array();
         
-        return $company_data;
+        return array_pop($company_data);
     }
 
     public static function get_stand_data($stand_id)

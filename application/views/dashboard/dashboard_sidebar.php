@@ -16,7 +16,7 @@
             </li>
             
             <li>
-                <a href="<?php echo base_url(); ?>">
+                <a href="<?php echo base_url().'Dashboard/add_event'; ?>">
                     <i class="pe-7s-map-marker"></i>
                     <p>Event Management</p>
                 </a>
