@@ -1,0 +1,17 @@
+{
+  "name": "expo_booking",
+  "description": "Exposition booking for Crossover Test",
+  "main": "index.js",
+  "authors": [
+    "Richard Karsan"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

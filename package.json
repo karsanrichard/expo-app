@@ -1,0 +1,13 @@
+{
+  "name": "expo_booking",
+  "version": "1.0.0",
+  "description": "Exposition booking for Crossover Test",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Richard Karsan",
+  "license": "ISC"
+}

@@ -1,0 +1,156 @@
+<style>
+	body{
+		color: #8b91a0;
+		font-weight: normal;
+	}
+
+	.stands-border-main{
+		border: 2px solid black;
+	}
+
+	.stands-margin-main{
+		margin:10px;
+	}
+
+	.stands-main{
+		display: flex;
+	    flex-direction: column;
+	    justify-content: space-between;
+		height:450px;
+		background-color: #38618C;
+		padding:5px;
+	}
+
+	.stands-spec{
+		height: 200px;
+		background-color: white;
+	    /*background: rgba(0, 0, 0, 0.7);*/
+		padding: 4px;
+	}
+
+	.stands-top{
+	}
+
+	.stands-bottom{
+		align-self: flex-end;
+	}
+
+	.stands-booked{
+		background-color: #35A7FF
+	}
+
+	.full-height{
+		height:100%;
+	}
+
+	.company-item {
+    position: relative;
+    overflow: hidden;
+	}
+
+	.company-item {
+	    position: relative;
+	}
+
+	.no-margin {
+	    margin: 0 !important;
+	}
+
+	.no-padding {
+	    padding: 0 !important;
+	}
+
+	a {
+    color: #88bbc8;
+	}
+
+	a, a:focus, a:hover, a:active {
+	    outline: 0 !important;
+	    text-decoration: none !important;
+	}
+
+	.company-item > .tools.tools-bottom {
+	    /* bottom: -30px; */
+	    height: 28px;
+	    left: 0;
+	    right: 0;
+	    /* top: auto; */
+	    /* width: auto; */
+	}
+
+	.company-item > .tools {
+	    /* background-color: rgba(0, 0, 0, 0.55); */
+	    bottom: 0;
+	    left: -30px;
+	    position: absolute;
+	    text-align: center;
+	    top: 0;
+	    transition: all 0.2s ease 0s;
+	    vertical-align: middle;
+	    /* width: 24px; */
+	}
+
+	#company-desc {
+	    background: #ffffff!important;
+	    padding: 5px;
+	    -webkit-border-radius: 0 0 3px 3px;
+	    -moz-border-radius: 0 0 3px 3px;
+	    border-radius: 0 0 3px 3px;
+	}
+
+	.company-item > .tools.tools-bottom {
+	    /* bottom: -30px; */
+	    height: 28px;
+	    left: 0;
+	    right: 0;
+	    /* top: auto; */
+	    /* width: auto; */
+	}
+
+	.company-item a.thumb-info span.thumb-info-title {
+	    background: rgba(0, 0, 0, 0.7);
+	    bottom: 4px;
+	    color: #FFFFFF;
+	    font-size: 12px;
+	    font-weight: 700;
+	    left: 4px;
+	    padding: 10px;
+	    position: absolute;
+	    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	    text-transform: uppercase;
+	}
+
+	.max-100px{
+		max-height: 90px!important;
+		max-width: 90px!important;
+
+		min-height: 90px!important;
+	    /*background: rgba(0, 0, 0, 0.7);*/
+
+	}
+
+	.mint-btn{
+		background: #16a085;
+	}
+
+	.desc {
+	    line-height: 16px;
+	    width: inherit;
+	    height: 3em;
+	    overflow: auto;
+	}
+
+	.small-text{
+		font-size: 1em;
+	}
+
+	.available-bcg{
+		width: 100%;
+    	max-height: 100px;
+	}
+
+	.modal-body {
+	    height: 300px;
+	    overflow-y: auto;
+	}
+</style>
